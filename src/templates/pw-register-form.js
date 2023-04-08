@@ -43,32 +43,61 @@ class PwResgiterForm extends LitElement {
     this.password = '';
     this.verifiedPassword = '';
     this.errorMessage = '';
-    this.expresion = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.#$%&_-]).{10,}$/;
+    this.expresionPassword = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[.#$%&_-]).{10,}$/;
+    this.expresionEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
     this.colorError = true;
+  }
+
+  isEmailAndNameCorrect() {
+    if ( this.email !== '' && this.nombre !== '' && this.expresionEmail.test(this.email) ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isPasswordCorrect() {
+    if ( this.password !== '' && this.expresionPassword.test(this.password) ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  arePasswordEqueal() {
+    if ( this.password === this.verifiedPassword ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   handleSubmit(event) {
     //console.log(event);
     event.preventDefault();
 
-    if (this.email !== '' && this.nombre !== '') {
+    console.log(this.isEmailAndNameCorrect());
 
-      /*
-      Comprobar que el email no sea uno igual al de la base de datos
-      */
+    if ( this.isEmailAndNameCorrect() ) {
 
-      if (this.password !== '' && this.verifiedPassword !== '' && this.expresion.test(this.password)) {
-        this.colorError = false;
-        this.errorMessage = 'Registrando usuario, revise su correo'
+      //Comprobar que el email no sea igual a alguno de la base de datos
+
+      if ( this.isPasswordCorrect() ) {
+        if ( this.arePasswordEqueal() ) {
+          this.colorError = false;
+          this.errorMessage = 'Para continuar revise su correo';
+        } else {
+          this.colorError = true;
+          this.errorMessage = 'Las contraseñas deben ser iguales';
+        }
       } else {
         this.colorError = true;
         this.errorMessage = 'Debe crear contraseña valida';
       }
     } else {
       this.colorError = true;
-      this.errorMessage = 'Debe ingresar su nombre y un email';
+      this.errorMessage = 'Debe ingresar su nombre y un email valido';
     }
-
   }
 
   render() {

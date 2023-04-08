@@ -87,6 +87,7 @@ class PwAuthentication extends LitElement {
 }
 
 customElements.define('pw-authentication', PwAuthentication);
+
 /*
 <form>
   <label>
